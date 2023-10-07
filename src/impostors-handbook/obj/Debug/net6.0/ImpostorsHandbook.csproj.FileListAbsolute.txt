@@ -1,0 +1,10 @@
+C:\Users\kayda\OneDrive\Documents\Among Us Modding\impostors-handbook\src\impostors-handbook\bin\Debug\net6.0\ImpostorsHandbook.deps.json
+C:\Users\kayda\OneDrive\Documents\Among Us Modding\impostors-handbook\src\impostors-handbook\bin\Debug\net6.0\ImpostorsHandbook.dll
+C:\Users\kayda\OneDrive\Documents\Among Us Modding\impostors-handbook\src\impostors-handbook\obj\Debug\net6.0\ImpostorsHandbook.csproj.AssemblyReference.cache
+C:\Users\kayda\OneDrive\Documents\Among Us Modding\impostors-handbook\src\impostors-handbook\obj\Debug\net6.0\ImpostorsHandbook.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\kayda\OneDrive\Documents\Among Us Modding\impostors-handbook\src\impostors-handbook\obj\Debug\net6.0\ImpostorsHandbook.AssemblyInfoInputs.cache
+C:\Users\kayda\OneDrive\Documents\Among Us Modding\impostors-handbook\src\impostors-handbook\obj\Debug\net6.0\ImpostorsHandbook.AssemblyInfo.cs
+C:\Users\kayda\OneDrive\Documents\Among Us Modding\impostors-handbook\src\impostors-handbook\obj\Debug\net6.0\ImpostorsHandbook.csproj.CoreCompileInputs.cache
+C:\Users\kayda\OneDrive\Documents\Among Us Modding\impostors-handbook\src\impostors-handbook\obj\Debug\net6.0\ImpostorsHandbook.dll
+C:\Users\kayda\OneDrive\Documents\Among Us Modding\impostors-handbook\src\impostors-handbook\obj\Debug\net6.0\refint\ImpostorsHandbook.dll
+C:\Users\kayda\OneDrive\Documents\Among Us Modding\impostors-handbook\src\impostors-handbook\obj\Debug\net6.0\ref\ImpostorsHandbook.dll

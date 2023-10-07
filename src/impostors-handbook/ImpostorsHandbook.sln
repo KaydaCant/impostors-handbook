@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImpostorsHandbook", "ImpostorsHandbook.csproj", "{C6963EEF-A96B-482A-81DB-D2F2C9121500}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C6963EEF-A96B-482A-81DB-D2F2C9121500}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6963EEF-A96B-482A-81DB-D2F2C9121500}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6963EEF-A96B-482A-81DB-D2F2C9121500}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6963EEF-A96B-482A-81DB-D2F2C9121500}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5A0B538E-9478-4A86-9C92-277CEB4E9044}
+	EndGlobalSection
+EndGlobal
