@@ -396,3 +396,9 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+################################
+# impostors-handbook gitignore #
+################################
+bin/
+.github/
