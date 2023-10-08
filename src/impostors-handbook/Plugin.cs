@@ -32,13 +32,4 @@ public partial class Plugin : BasePlugin
 
         Harmony.PatchAll();
     }
-
-    [HarmonyPatch(typeof(MapTaskOverlay), nameof(MapTaskOverlay.Show))]
-    public static class testpatch
-    {
-        public static void Prefix()
-        {
-            RpcManager.RpcSendRoles(GameData.Instance.GetHost().Object, "0:0;1:0;2:0");
-        }
-    }
 }

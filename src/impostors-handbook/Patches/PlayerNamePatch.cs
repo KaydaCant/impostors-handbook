@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using ImpostorsHandbook.Managers;
 using ImpostorsHandbook.Roles;
 using Reactor.Utilities.Extensions;
 using UnityEngine;
@@ -20,19 +21,23 @@ namespace ImpostorsHandbook.Patches
                  *  3: WINNER LAST ROUND
                  */
 
+                BaseRole? playerRole = null;
+                if (__instance == PlayerControl.LocalPlayer) playerRole = PlayerManager.MyRole;
+                else if (PlayerManager.KnownRoles.ContainsKey(__instance.PlayerId)) playerRole = Managers.RoleManager.GetRole(PlayerManager.KnownRoles[__instance.PlayerId]);
+
                 string nameIcons = "";
-                Role? role = null;
-                if (Managers.PlayerManager.RoleDictionary.ContainsKey(__instance.PlayerId)) role = Managers.PlayerManager.RoleDictionary[__instance.PlayerId];
-                if (role != null && role.GetTeam() == Enum.Team.Impostor) nameIcons += $"<sprite=0>";
+                if (PlayerManager.ImpostorPartners.Contains(__instance.PlayerId)) nameIcons += $"<sprite=0>";
 
                 string roleString = "";
-                if (role != null) roleString = $"\n<color=#{UnityExtensions.ToHtmlStringRGBA(role.GetColor())}>{role.GetName()}</color>";
+                if (playerRole != null) roleString = $"\n<color=#{UnityExtensions.ToHtmlStringRGBA(playerRole.Color)}>{playerRole.Name}</color>";
 
                 __instance.cosmetics.nameText.color = new Color32(255, 255, 255, 255);
                 __instance.cosmetics.nameText.text = $"{__instance.name}{nameIcons}{roleString}";
+
+                // TODO: Update this with positions instead of awkward text size
                 //__instance.cosmetics.colorBlindText.text = $"<size=18> </size>\n{__instance.cosmetics.GetColorBlindText()}"; // Waist
                 __instance.cosmetics.colorBlindText.text = $"<size=3> </size>\n{__instance.cosmetics.GetColorBlindText()}"; // Below Name
-
+                
                 __instance.cosmetics.nameText.spriteAsset = AssetManager.nameIcons;
             }
         }

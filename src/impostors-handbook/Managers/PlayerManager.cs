@@ -5,13 +5,14 @@ namespace ImpostorsHandbook.Managers
 {
     internal static class PlayerManager
     {
-        public static Dictionary<byte, Role> RoleDictionary;
-        public static Dictionary<byte, bool> KnowPlayerRole;
+        public static Dictionary<byte, Enum.Role> KnownRoles;
+        public static List<byte> ImpostorPartners;
+        public static BaseRole? MyRole;
 
         static PlayerManager()
         {
-            RoleDictionary = new();
-            KnowPlayerRole = new();
+            KnownRoles = new();
+            ImpostorPartners = new();
         }
     }
 }

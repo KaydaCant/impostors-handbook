@@ -68,25 +68,45 @@ namespace ImpostorsHandbook.Managers
             for (int i = impostorCount; i < randomizationSettings.ImpostorCount; i++)
             {
                 winners.Add(Enum.Role.Impostor);
+                playerCount++;
+                impostorCount++;
             }
 
             for (int i = playerCount; i < randomizationSettings.PlayerCount; i++)
             {
                 winners.Add(Enum.Role.Crewmate);
+                playerCount++;
             }
 
             List<Enum.Role> output = winners.OrderBy(x => random.Next()).ToList();
             return output;
         }
 
-        public static Role EnumToRole(Enum.Role role)
+        public static BaseRole GetRole(Enum.Role role, PlayerControl player)
         {
             return role switch
             {
-                Enum.Role.Crewmate => new Crewmate(),
-                Enum.Role.Impostor => new Impostor(),
-                Enum.Role.Jester => new Jester(),
-                _ => new Crewmate(),
+                Enum.Role.Crewmate => new Crewmate(player),
+
+                Enum.Role.Impostor => new Impostor(player),
+
+                Enum.Role.Jester => new Jester(player),
+
+                _ => new Crewmate(player),
+            };
+        }
+
+        public static BaseRole GetRole(Enum.Role role)
+        {
+            return role switch
+            {
+                Enum.Role.Crewmate => Crewmate.Instance,
+
+                Enum.Role.Impostor => Impostor.Instance,
+
+                Enum.Role.Jester => Jester.Instance,
+
+                _ => Crewmate.Instance,
             };
         }
     }

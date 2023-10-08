@@ -1,12 +1,14 @@
-﻿namespace ImpostorsHandbook.Roles
-{
-    public class ImpostorRole : Role
-    {
-        public ImpostorRole() : base() { }
+﻿using System;
 
-        public override bool WinConditionMet()
+namespace ImpostorsHandbook.Roles
+{
+    public abstract class ImpostorRole : BaseRole
+    {
+        public ImpostorRole(PlayerControl? player = null) : base(player) { }
+
+        public override bool WinCriteriaMet()
         {
-            return false;
+            throw new NotImplementedException();
         }
     }
 }

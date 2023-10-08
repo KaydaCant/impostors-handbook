@@ -1,12 +1,14 @@
-﻿namespace ImpostorsHandbook.Roles
-{
-    public class CrewmateRole : Role
-    {
-        public CrewmateRole() : base() { }
+﻿using System;
 
-        public override bool WinConditionMet()
+namespace ImpostorsHandbook.Roles
+{
+    public abstract class CrewmateRole : BaseRole
+    {
+        public CrewmateRole(PlayerControl? player = null) : base(player) { }
+
+        public override bool WinCriteriaMet()
         {
-            return false;
+            throw new NotImplementedException();
         }
     }
 }

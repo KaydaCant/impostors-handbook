@@ -1,16 +1,18 @@
 ﻿namespace ImpostorsHandbook.Enum
 {
-   public enum Team : int
+   public enum Team : byte
     {
         Crewmate, Impostor, Neutral
     }
 
-    public enum Role : int
+    public enum Role : byte
     {
         Crewmate, Engineer, Scientist, GuardianAngel,
 
         Impostor, Shapeshifter,
 
-        Jester
+        Jester,
+
+        None
     }
 }

@@ -1,7 +1,9 @@
-﻿using HarmonyLib;
+﻿using Epic.OnlineServices.Reports;
+using HarmonyLib;
 using ImpostorsHandbook.Managers;
 using ImpostorsHandbook.Roles;
 using InnerNet;
+using Reactor.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +18,7 @@ namespace ImpostorsHandbook.Patches
             public static bool Prefix(RoleManager __instance)
             {
 
-                PlayerManager.RoleDictionary.Clear();
+                HostManager.PlayerRoles.Clear();
 
                 Il2CppSystem.Collections.Generic.List<ClientData> unsortedPlayerList = new();
                 AmongUsClient.Instance.GetAllClients(unsortedPlayerList);
@@ -25,7 +27,8 @@ namespace ImpostorsHandbook.Patches
                                                         where c.Character.Data != null
                                                         where !c.Character.Data.Disconnected && !c.Character.Data.IsDead
                                                         orderby c.Id
-                                                        select c.Character.Data).ToList<GameData.PlayerInfo>();
+                                                        select c.Character.Data).ToList();
+
                 foreach (GameData.PlayerInfo playerInfo in GameData.Instance.AllPlayers)
                 {
                     if (playerInfo.Object != null && playerInfo.Object.isDummy)
@@ -34,42 +37,25 @@ namespace ImpostorsHandbook.Patches
                     }
                 }
 
-                var gameSettings = new RandomizationSettings(3, 1, 1);
+                var gameSettings = new RandomizationSettings(3, 2, 1);
                 var roleOpportunities = new List<RoleOpportunity>
                 {
                     new RoleOpportunity(Enum.Role.Jester, Enum.Team.Neutral, 0.5)
                 };
 
+                RpcManager.SendRpc(RpcManager.RpcType.ResetRoles, Array.Empty<byte>());
+
                 var roles = Managers.RoleManager.RandomizeRoles(gameSettings, roleOpportunities);
                 for (int i = 0; i < playerList.Count; i++)
                 {
-                    //Logger<Plugin>.Info(role.ToString());
                     PlayerControl player = playerList[i].Object;
-                    Role role = Managers.RoleManager.EnumToRole(roles[i]);
-                    PlayerManager.RoleDictionary.Add(player.PlayerId, role);
-                    //player.RpcSetRole(role.GetBaseRole());
-                    player.SetRole(role.GetBaseRole());
-                    player.RpcSetRole(role.GetBaseRole());
+                    BaseRole targetRole = Managers.RoleManager.GetRole(roles[i]);
+
+                    Logger<Plugin>.Info($"Assigning role '{targetRole.Name}' to '{player.name}'.");
+                    HostManager.PlayerRoles.Add(player.PlayerId, targetRole.Enum);
                 }
 
-                List<string> entries = new();
-                foreach (KeyValuePair<byte, Role> playerRole in PlayerManager.RoleDictionary)
-                {
-                    string roleEntry = "";
-                    roleEntry += playerRole.Key.ToString(); // Player
-                    roleEntry += ":"; // Seperator
-                    roleEntry += ((int) playerRole.Value.GetRole()).ToString(); // Role
-                    entries.Add(roleEntry);
-                }
-                
-                string message = string.Join(";", entries);
-                RpcManager.RpcSendRoles(PlayerControl.LocalPlayer, message);
-                /*Dictionary<byte, Enum.Role> rolePacket = new();
-                foreach(KeyValuePair<byte, Role> rolePair in PlayerManager.RoleDictionary)
-                {
-                    rolePacket[rolePair.Key] = rolePair.Value.GetRole();
-                }
-                RpcManager.RpcSendRoles(PlayerControl.LocalPlayer, rolePacket);*/
+                HostManager.SendRoles();
 
                 return false;
             }

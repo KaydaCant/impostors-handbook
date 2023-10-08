@@ -2,7 +2,6 @@
 using Il2CppSystem;
 using Il2CppSystem.Collections.Generic;
 using ImpostorsHandbook.Managers;
-using ImpostorsHandbook.Roles;
 using UnityEngine;
 
 namespace ImpostorsHandbook.Patches
@@ -30,20 +29,19 @@ namespace ImpostorsHandbook.Patches
         static bool ShowIntroCutscene(IntroCutscene __instance, ref List<PlayerControl> teamToDisplay)
         {
             PlayerControl player = PlayerControl.LocalPlayer;
-            if (!PlayerManager.RoleDictionary.ContainsKey(player.PlayerId)) return true;
-            Role role = PlayerManager.RoleDictionary[player.PlayerId];
+            if (PlayerManager.MyRole == null) return true;
 
-            if (role.GetTeam() == Enum.Team.Crewmate) teamToDisplay = IntroCutscene.SelectTeamToShow((Func<GameData.PlayerInfo, bool>)((GameData.PlayerInfo playerInfo) => true));
-            if (role.GetTeam() == Enum.Team.Impostor) teamToDisplay = IntroCutscene.SelectTeamToShow((Func<GameData.PlayerInfo, bool>)((GameData.PlayerInfo playerInfo) => PlayerManager.RoleDictionary[playerInfo.PlayerId].GetTeam() == Enum.Team.Impostor));
-            if (role.GetTeam() == Enum.Team.Neutral) teamToDisplay = IntroCutscene.SelectTeamToShow((Func<GameData.PlayerInfo, bool>)((GameData.PlayerInfo playerInfo) => playerInfo.PlayerId == player.PlayerId));
+            //if (PlayerManager.MyRole.Team == Enum.Team.Crewmate) teamToDisplay = IntroCutscene.SelectTeamToShow((Func<GameData.PlayerInfo, bool>)((GameData.PlayerInfo playerInfo) => true));
+            //if (PlayerManager.MyRole.Team == Enum.Team.Impostor) teamToDisplay = IntroCutscene.SelectTeamToShow((Func<GameData.PlayerInfo, bool>)((GameData.PlayerInfo playerInfo) => PlayerManager.KnownRoles.ContainsKey(playerInfo.PlayerId) && RoleManager.GetRole(PlayerManager.KnownRoles[playerInfo.PlayerId]).Team == Enum.Team.Impostor));
+            //if (PlayerManager.MyRole.Team == Enum.Team.Neutral) teamToDisplay = IntroCutscene.SelectTeamToShow((Func<GameData.PlayerInfo, bool>)((GameData.PlayerInfo playerInfo) => playerInfo.PlayerId == player.PlayerId));
 
             Vector3 position = __instance.BackgroundBar.transform.position;
             position.y -= 0.25f;
             __instance.BackgroundBar.transform.position = position;
-            __instance.BackgroundBar.material.SetColor("_Color", role.GetColor());
+            __instance.BackgroundBar.material.SetColor("_Color", PlayerManager.MyRole.Color);
 
-            __instance.TeamTitle.text = role.GetName();
-            __instance.TeamTitle.color = role.GetColor();
+            __instance.TeamTitle.text = PlayerManager.MyRole.Name;
+            __instance.TeamTitle.color = PlayerManager.MyRole.Color;
 
             for (int i = 0; i < teamToDisplay.Count; i++)
             {
@@ -53,12 +51,13 @@ namespace ImpostorsHandbook.Patches
                 GameData.PlayerInfo data = playerControl.Data;
                 if (data == null) continue;
 
-                PoolablePlayer poolablePlayer = __instance.CreatePlayer(i, 1, data, false);
+                PoolablePlayer poolablePlayer = __instance.CreatePlayer(i, 1, data, PlayerManager.MyRole.Team == Enum.Team.Impostor);
                 if (i == 0 && data.PlayerId == player.PlayerId)
                 {
                     __instance.ourCrewmate = poolablePlayer;
                 }
             }
+
             return false;
         }
     }
