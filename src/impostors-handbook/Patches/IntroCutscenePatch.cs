@@ -2,6 +2,8 @@
 using Il2CppSystem;
 using Il2CppSystem.Collections.Generic;
 using ImpostorsHandbook.Managers;
+using ImpostorsHandbook.Roles;
+using Reactor.Utilities.Extensions;
 using UnityEngine;
 
 namespace ImpostorsHandbook.Patches
@@ -31,17 +33,25 @@ namespace ImpostorsHandbook.Patches
             PlayerControl player = PlayerControl.LocalPlayer;
             if (PlayerManager.MyRole == null) return true;
 
-            //if (PlayerManager.MyRole.Team == Enum.Team.Crewmate) teamToDisplay = IntroCutscene.SelectTeamToShow((Func<GameData.PlayerInfo, bool>)((GameData.PlayerInfo playerInfo) => true));
-            //if (PlayerManager.MyRole.Team == Enum.Team.Impostor) teamToDisplay = IntroCutscene.SelectTeamToShow((Func<GameData.PlayerInfo, bool>)((GameData.PlayerInfo playerInfo) => PlayerManager.KnownRoles.ContainsKey(playerInfo.PlayerId) && RoleManager.GetRole(PlayerManager.KnownRoles[playerInfo.PlayerId]).Team == Enum.Team.Impostor));
-            //if (PlayerManager.MyRole.Team == Enum.Team.Neutral) teamToDisplay = IntroCutscene.SelectTeamToShow((Func<GameData.PlayerInfo, bool>)((GameData.PlayerInfo playerInfo) => playerInfo.PlayerId == player.PlayerId));
+            if (PlayerManager.MyRole.Team == Enum.Team.Crewmate) teamToDisplay = IntroCutscene.SelectTeamToShow((Func<GameData.PlayerInfo, bool>)((GameData.PlayerInfo playerInfo) => true));
+            if (PlayerManager.MyRole.Team == Enum.Team.Impostor) teamToDisplay = IntroCutscene.SelectTeamToShow((Func<GameData.PlayerInfo, bool>)((GameData.PlayerInfo playerInfo) => PlayerManager.KnownRoles.ContainsKey(playerInfo.PlayerId) && Managers.RoleManager.GetRole(PlayerManager.KnownRoles[playerInfo.PlayerId]).Team == Enum.Team.Impostor));
+            if (PlayerManager.MyRole.Team == Enum.Team.Neutral) teamToDisplay = IntroCutscene.SelectTeamToShow((Func<GameData.PlayerInfo, bool>)((GameData.PlayerInfo playerInfo) => playerInfo.PlayerId == player.PlayerId));
 
             Vector3 position = __instance.BackgroundBar.transform.position;
-            position.y -= 0.25f;
+            position.y -= 1.25f; //0.25f
             __instance.BackgroundBar.transform.position = position;
             __instance.BackgroundBar.material.SetColor("_Color", PlayerManager.MyRole.Color);
 
+            string teamText = "";
+            if (PlayerManager.MyRole.Team == Enum.Team.Crewmate) teamText = $"<color=#{UnityExtensions.ToHtmlStringRGBA(Crewmate.Instance.Color)}>Crewmate</color>";
+            if (PlayerManager.MyRole.Team == Enum.Team.Impostor) teamText = $"<color=#{UnityExtensions.ToHtmlStringRGBA(Impostor.Instance.Color)}>Impostor</color>";
+            if (PlayerManager.MyRole.Team == Enum.Team.Neutral) teamText = $"<color=#{UnityExtensions.ToHtmlStringRGBA(Jester.Instance.Color)}>Neutral</color>";
+
             __instance.TeamTitle.text = PlayerManager.MyRole.Name;
+            if (teamText != "") __instance.TeamTitle.text = $"{PlayerManager.MyRole.Name}\n<size=8>{teamText}</size>";
+
             __instance.TeamTitle.color = PlayerManager.MyRole.Color;
+            __instance.TeamTitle.fontSizeMax = 11;
 
             for (int i = 0; i < teamToDisplay.Count; i++)
             {

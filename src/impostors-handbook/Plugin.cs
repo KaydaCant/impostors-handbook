@@ -13,7 +13,7 @@ namespace ImpostorsHandbook;
 [BepInAutoPlugin]
 [BepInProcess("Among Us.exe")]
 [BepInDependency(ReactorPlugin.Id)]
-[ReactorModFlags(Reactor.Networking.ModFlags.RequireOnAllClients)]
+//[ReactorModFlags(Reactor.Networking.ModFlags.RequireOnAllClients)]
 public partial class Plugin : BasePlugin
 {
     public Harmony Harmony { get; } = new(Id);

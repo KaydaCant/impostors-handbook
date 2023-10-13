@@ -17,5 +17,7 @@ namespace ImpostorsHandbook.Roles
         public static Impostor Instance = new();
 
         public Impostor(PlayerControl? player = null) : base(player) { }
+
+        public override void FixedUpdate() { }
     }
 }

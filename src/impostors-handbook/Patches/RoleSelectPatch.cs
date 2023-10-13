@@ -1,4 +1,5 @@
-﻿using Epic.OnlineServices.Reports;
+﻿using AmongUs.Data.Settings;
+using Epic.OnlineServices.Reports;
 using HarmonyLib;
 using ImpostorsHandbook.Managers;
 using ImpostorsHandbook.Roles;
@@ -37,22 +38,30 @@ namespace ImpostorsHandbook.Patches
                     }
                 }
 
-                var gameSettings = new RandomizationSettings(3, 2, 1);
+                var gameSettings = new RandomizationSettings(4, 1, 0);
                 var roleOpportunities = new List<RoleOpportunity>
                 {
-                    new RoleOpportunity(Enum.Role.Jester, Enum.Team.Neutral, 0.5)
+                    //new RoleOpportunity(Enum.Role.Shapeshifter, 0.5),
+                    //new RoleOpportunity(Enum.Role.Jester, 0.5),
+                    //new RoleOpportunity(Enum.Role.Engineer, 1),
+                    //new RoleOpportunity(Enum.Role.GuardianAngel, 1),
+                    //new RoleOpportunity(Enum.Role.Scientist, 1),
+                    new RoleOpportunity(Enum.Role.Seer, 1),
                 };
 
+                PlayerManager.MyRole = null;
+                PlayerManager.KnownRoles.Clear();
+                PlayerManager.ImpostorPartners.Clear();
                 RpcManager.SendRpc(RpcManager.RpcType.ResetRoles, Array.Empty<byte>());
 
                 var roles = Managers.RoleManager.RandomizeRoles(gameSettings, roleOpportunities);
                 for (int i = 0; i < playerList.Count; i++)
                 {
                     PlayerControl player = playerList[i].Object;
-                    BaseRole targetRole = Managers.RoleManager.GetRole(roles[i]);
+                    BaseRole targetRole = Managers.RoleManager.GetRole(roles[i], player);
 
                     Logger<Plugin>.Info($"Assigning role '{targetRole.Name}' to '{player.name}'.");
-                    HostManager.PlayerRoles.Add(player.PlayerId, targetRole.Enum);
+                    HostManager.PlayerRoles.Add(player.PlayerId, targetRole);
                 }
 
                 HostManager.SendRoles();

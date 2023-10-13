@@ -17,5 +17,7 @@ namespace ImpostorsHandbook.Roles
         public static Crewmate Instance = new();
 
         public Crewmate(PlayerControl? player = null) : base(player) { }
+
+        public override void FixedUpdate() { }
     }
 }

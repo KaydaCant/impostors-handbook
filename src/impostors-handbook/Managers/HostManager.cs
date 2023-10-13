@@ -1,4 +1,5 @@
-﻿using ImpostorsHandbook.Roles;
+﻿using ImpostorsHandbook.Enum;
+using ImpostorsHandbook.Roles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace ImpostorsHandbook.Managers
 {
     internal static class HostManager
     {
-        public static Dictionary<byte, Enum.Role> PlayerRoles;
+        public static Dictionary<byte, BaseRole> PlayerRoles;
 
         static HostManager()
         {
@@ -18,30 +19,40 @@ namespace ImpostorsHandbook.Managers
 
         public static void SendRoles()
         {
-            foreach (KeyValuePair<byte, Enum.Role> item in PlayerRoles)
+            foreach (KeyValuePair<byte, BaseRole> pair in PlayerRoles)
             {
-                PlayerControl player = GameData.Instance.GetPlayerById(item.Key).Object;
-                BaseRole targetRole = RoleManager.GetRole(item.Value);
+                PlayerControl player = GameData.Instance.GetPlayerById(pair.Key).Object;
 
-                Dictionary<byte, Enum.Role> knownRoles = new();
+                Dictionary<byte, Role> knownRoles = new();
 
-                if (targetRole.Team == Enum.Team.Impostor) {
+                if (pair.Value.Team == Team.Impostor) {
                     List<byte> impostorPartners = new();
-                    foreach(KeyValuePair<byte, Enum.Role> potentialPartner in PlayerRoles)
+                    foreach(KeyValuePair<byte, BaseRole> partnerPair in PlayerRoles)
                     {
-                        byte partnerId = potentialPartner.Key;
-                        BaseRole partnerRole = RoleManager.GetRole(potentialPartner.Value);
-                        if (partnerRole.Team != Enum.Team.Impostor) continue;
+                        byte partnerId = partnerPair.Key;
+                        if (partnerPair.Value.Team != Team.Impostor) continue;
 
                         impostorPartners.Add(partnerId);
-                        knownRoles.Add(partnerId, partnerRole.Enum); // TODO: Only if game setting "Impostors Know Partner Roles" is true.
+                        knownRoles.Add(partnerId, partnerPair.Value.Enum); // TODO: Only if game setting "Impostors Know Partner Roles" is true.
                     }
-                    RpcManager.SendImpostorPartners(player.PlayerId, impostorPartners);
+
+                    if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId) PlayerManager.ImpostorPartners = impostorPartners;
+                    else RpcManager.SendImpostorPartners(player.PlayerId, impostorPartners);
                 }
-                if (!knownRoles.ContainsKey(player.PlayerId)) knownRoles.Add(player.PlayerId, targetRole.Enum);
-                RpcManager.SendRoles(player.PlayerId, knownRoles);
-                player.SetRole(targetRole.Type);
-                player.RpcSetRole(targetRole.Type);
+                
+                if (!knownRoles.ContainsKey(player.PlayerId)) knownRoles.Add(player.PlayerId, pair.Value.Enum);
+
+                if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId) {
+                    foreach (KeyValuePair<byte, Role> knownRole in knownRoles)
+                    {
+                        if (knownRole.Key == PlayerControl.LocalPlayer.PlayerId) PlayerManager.MyRole = RoleManager.GetRole(knownRole.Value, PlayerControl.LocalPlayer);
+                        if (!PlayerManager.KnownRoles.ContainsKey(knownRole.Key)) PlayerManager.KnownRoles.Add(knownRole.Key, knownRole.Value);
+                    }
+                }
+                else RpcManager.SendRoles(player.PlayerId, knownRoles);
+
+                player.SetRole(pair.Value.Type);
+                player.RpcSetRole(pair.Value.Type);
             }
         }
     }

@@ -21,11 +21,8 @@ namespace ImpostorsHandbook.Roles
             isVotedOut = false;
         }
 
-        public bool isVotedOut;
+        public override void FixedUpdate() { }
 
-        public override bool WinCriteriaMet()
-        {
-            return isVotedOut;
-        }
+        public bool isVotedOut;
     }
 }

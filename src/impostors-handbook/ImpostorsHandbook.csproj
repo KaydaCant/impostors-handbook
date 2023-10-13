@@ -23,7 +23,6 @@
 
     <ItemGroup>
       <Folder Include="Helpers\" />
-      <Folder Include="Patches\Roles\Jester\" />
     </ItemGroup>
 
     <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs)' != ''">

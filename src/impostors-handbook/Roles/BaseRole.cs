@@ -13,12 +13,13 @@ namespace ImpostorsHandbook.Roles
         public abstract Enum.Team Team { get; }
         public abstract Enum.Role Enum { get; }
 
-        public readonly PlayerControl? player;
+        public readonly PlayerControl player;
         public BaseRole(PlayerControl? player = null)
         {
-            this.player = player;
+            if (player != null) this.player = player;
+            else this.player = new PlayerControl();
         }
 
-        public abstract bool WinCriteriaMet();
+        public abstract void FixedUpdate();
     }
 }

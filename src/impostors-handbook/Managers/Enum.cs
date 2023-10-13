@@ -7,7 +7,7 @@
 
     public enum Role : byte
     {
-        Crewmate, Engineer, Scientist, GuardianAngel,
+        Crewmate, Engineer, Scientist, GuardianAngel, Seer,
 
         Impostor, Shapeshifter,
 
